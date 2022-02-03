@@ -12,7 +12,7 @@
 ## Installation
 
 ```bash
-asdf plugin-add dprint https://github.com/SnO2WMaN-HQ/asdf-dprint
+asdf plugin-add dprint https://github.com/asdf-community/asdf-dprint
 ```
 
 ## Usage
