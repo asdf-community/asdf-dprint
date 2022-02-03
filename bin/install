@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+trap cleanup SIGINT SIGTERM ERR
+
+cleanup() {
+  trap - SIGINT SIGTERM ERR
+  rm -rf "$ASDF_INSTALL_PATH"
+  echo
+  echo -e "\e[33mCleanup:\e[m Something went wrong!"
+  echo
+  echo "$(caller): ${BASH_COMMAND}"
+}
+
+fail() {
+  echo -e "\e[31mFail:\e[m $*"
+  exit 1
+}
+
+install_dprint() {
+  local install_type=$1
+  local version=$2
+  local install_path=$3
+
+  if [ "$install_type" != "version" ]; then
+    fail "asdf-dprint supports release installs only"
+  fi
+
+  local platform
+
+  case "$OSTYPE" in
+    darwin*) platform="apple-darwin" ;;
+    linux*) platform="unknown-linux-gnu" ;;
+    *) fail "Unsupported platform" ;;
+  esac
+
+  local architecture
+
+  case "$(uname -m)" in
+    x86_64*) architecture="x86_64" ;;
+    *) fail "Unsupported architecture" ;;
+  esac
+
+  local archive_format="zip"
+  local uncompress_command="unzip -d ${install_path}/bin"
+  local download_url="https://github.com/dprint/dprint/releases/download/${version}/dprint-${architecture}-${platform}.${archive_format}"
+  local source_path="${install_path}/bin/dprint.${archive_format}"
+
+  echo "∗ Downloading and installing dprint..."
+  mkdir -p "${install_path}/bin"
+  curl --fail --silent --location --create-dirs --output "$source_path" "$download_url"
+  $uncompress_command -o "$source_path"
+  chmod +x "${install_path}/bin/dprint"
+  rm "$source_path"
+  echo "The installation was successful!"
+}
+
+install_dprint "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
