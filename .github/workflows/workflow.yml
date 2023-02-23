@@ -29,11 +29,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup asdf
-        uses: asdf-vm/actions/setup@v1
-
-      - name: Install bats-core
-        run: brew install bats-core
+      - name: asdf_install
+        uses: asdf-vm/actions/install@v1
 
       - name: Test plugin
         run: |
@@ -47,8 +44,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install ShellCheck
-        run: brew install shellcheck
+      - name: asdf_install
+        uses: asdf-vm/actions/install@v1
 
       - name: Run ShellCheck
         run: make lint
@@ -60,8 +57,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install shfmt
-        run: brew install shfmt
+      - name: asdf_install
+        uses: asdf-vm/actions/install@v1
 
       - name: Run shfmt
         run: make fmt-check
