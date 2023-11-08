@@ -41,7 +41,7 @@ jobs:
 
       - name: Test plugin
         run: |
-          asdf plugin-add dprint $GITHUB_WORKSPACE
+          asdf plugin-add dprint "$GITHUB_WORKSPACE"
           make test
 
   lint:
